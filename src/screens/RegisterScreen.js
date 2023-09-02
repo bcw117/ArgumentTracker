@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, Pressable, TextInput, SafeAreaView, KeyboardAvoidingView } from 'react-native';
 import { auth } from '../../firebaseConfig'
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { db } from '../../firebaseConfig';
 import { doc, setDoc } from "firebase/firestore";
 
@@ -16,15 +16,18 @@ const RegisterScreen = () => {
     const signUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
         .then((cred) => {
-            cred.user.displayName = username;
             setDoc(doc(db, 'users', cred.user.uid), {
                 id: cred.user.uid,
-                name: [fullname],
-                username: [username],
-                email: [email]
+                name: fullname,
+                email: email
             })
             .catch(error => {
                 alert(error)
+            })
+        })
+        .then(() => {
+            updateProfile(auth.currentUser, {
+                displayName: username
             })
         })
         .catch((error) => {

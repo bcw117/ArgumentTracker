@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Button, Pressable, Alert, TextInput, SafeAreaView, KeyboardAvoidingView} from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, Alert, 
+        TextInput, SafeAreaView, KeyboardAvoidingView, ImageBackground} from 'react-native';
 import { auth } from '../../firebaseConfig'
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -21,9 +22,14 @@ const LoginScreen = ({navigation}) => {
     
     return(
         <SafeAreaView style={login.container}>
-            <Text style={{fontSize: 25, marginBottom: 25}}>
+            <Text style={{fontFamily: 'Nexa-Bold', fontSize: 25, marginBottom: 25}}>
                 Why Are We Fighting?
             </Text>
+            <Image
+            style={{width: 150, height: 150, marginBottom: 10}}
+            resize='contain'
+            source={require('../../assets/logo.png')}>
+            </Image>
             <KeyboardAvoidingView 
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={login.inner}>
@@ -49,7 +55,6 @@ const LoginScreen = ({navigation}) => {
                         </Text>
                     </Pressable>
                 </View>
-                
                 <View>
                     <Pressable style={login.button} onPress={() => navigation.navigate('Register')}>
                         <Text style={login.text}>

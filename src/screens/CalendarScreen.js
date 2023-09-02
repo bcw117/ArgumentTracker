@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Button, Pressable, Alert, TextInput} from 'react-native';
+import { StyleSheet, Text, View, Button, Pressable, Alert, TextInput, SafeAreaView} from 'react-native';
 import moment from "moment";
-import {Calendar} from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 import { auth } from '../../firebaseConfig';
 import { db } from '../../firebaseConfig';
-import { addDoc, collection, doc, setDoc, Timestamp } from "firebase/firestore"; 
+import { addDoc, collection,} from "firebase/firestore"; 
 import { KeyboardAvoidingView } from 'react-native';
 
 
@@ -18,14 +18,26 @@ const CalendarScreen = () => {
     tempDate = new Date(tempDate.setMinutes(tempDate.getMinutes() + tempDate.getTimezoneOffset()))
     console.log(tempDate)
 
+    if (!reason || !date)
+    {
+      return null
+    }
+
     addDoc(collection(db, "fightLog"), 
     {
       user_id: auth.currentUser.uid,
       reason: text,
       date: tempDate
     })
-    setText(undefined)
-    alert("Record Successfully Logged!")
+    .then(() => {
+      setText(undefined)
+      alert("Record Successfully Logged!")
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    
+    
   }
 
   useEffect(() => {
@@ -33,11 +45,26 @@ const CalendarScreen = () => {
   }, []);
 
   return(
-    <KeyboardAvoidingView 
-    style={calScreen.container} 
-    behavior='position' >
+    <SafeAreaView style={calScreen.container}>
+      <Text style={calScreen.title}>
+          Calendar
+        </Text>
+      <KeyboardAvoidingView 
+      style={calScreen.inner}
+      behavior={Platform.OS === 'ios' ? 1000 : 1}>
         <Calendar
-        style={calScreen.calendar}
+          style={{
+            borderRadius: 5,
+            padding: 10,
+            borderTopColor: 'gray',
+            borderBottomColor: 'gray',
+            borderTopWidth: 1,
+            borderBottomWidth: 1
+          }}
+          theme={{
+            calendarBackground: 'white',
+            dayTextColor: 'gray',
+          }}
           onDayPress={day => {
             setDate(moment(day.dateString).format("YYYY-MM-DD"));
             console.log(date)
@@ -47,23 +74,27 @@ const CalendarScreen = () => {
           }}
         />
         <View style={calScreen.infoBox}>
-          <Text style={{position: 'relative', color: 'white'}}>
+          <Text style={{fontFamily: 'Roboto-Bold', position: 'relative', color: 'white'}}>
             Reason:
           </Text>
           <TextInput 
-            style={{height: 40, color: 'white'}}
+            style={{height: 40, color: 'white', fontFamily: 'Roboto-Regular'}}
             placeholder="Type your problem here!"
             placeholderTextColor="#b7b8b6" 
             onChangeText={newText => setText(newText)}
             defaultValue={text}
           />
-          <Pressable>
-              <Text onPress={() => addLog()} style={{position: 'absolute', bottom: 0, right: 0, color: 'white'}}>
+          <Pressable style={{padding: 2}}>
+              <Text 
+              onPress={() => addLog()} 
+              style={{position: 'absolute', bottom: 0, right: 0, color: 'white', 
+                      fontFamily: 'Roboto-Bold'}}>
                 Submit
               </Text>
           </Pressable>
         </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -72,11 +103,22 @@ const calScreen = StyleSheet.create({
       flex: 1,
       backgroundColor: 'white',
       width: '100%',
-      height: '100%'
+      height: '100%',
+      alignItems: 'stretch'
+    },
+    inner: {
+
+    },
+    title: {
+      fontWeight: 'bold',
+      fontSize: 40,
+      textAlign: 'center',
+      marginBottom: 15,
+      padding: 20
     },
     infoBox: {
       padding: 25,
-      backgroundColor: '#5090d4',
+      backgroundColor: '#ab69e0',
       borderRadius: 10,
       margin: 20
     },

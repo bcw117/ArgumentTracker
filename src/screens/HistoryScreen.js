@@ -4,9 +4,7 @@ import { KeyboardAvoidingView } from 'react-native';
 import { auth, db } from '../../firebaseConfig';
 import { collection, deleteDoc, doc, query, where, getDocs, setDoc, updateDoc } from "firebase/firestore";
 
-const HistoryScreen = () => {
-
-
+const HistoryScreen = () => {   
     const [logs, setLogs] = useState([])
     const [updatedText, setUpdatedText] = useState('')
 
@@ -59,31 +57,43 @@ const HistoryScreen = () => {
 
     
     return (
-        <SafeAreaView>
-            <ScrollView>
+        <SafeAreaView style={history.container}>
+            <Text style={history.title}>
+                History
+            </Text>
+            <ScrollView style={history.inner}>
                 {logs.map((item, key) => {
                     return(
-                        <View key={key}>
+                        <View style={[history.logContainer, history.shadowProp]} key={key}>
+                            <Text style={{fontFamily: 'SourceSansPro-Bold'}}>
+                                Reason:
+                            </Text>
                             <TextInput
-                            defaultValue={item.reason}
-                            onChangeText={(text) => setUpdatedText(text)}
-                            />
-                            <Text>
-                                {item.date.toDate().toDateString()}
+                                style={{fontFamily: 'SourceSansPro-Regular', marginVertical: 5}}
+                                color='black'
+                                defaultValue={item.reason}
+                                multiline={true}
+                                onChangeText={(text) => setUpdatedText(text)}>
+                            </TextInput>
+                            <Text style={{fontFamily: 'SourceSansPro-Bold', marginVertical: 5}}>
+                                Date: 
+                            </Text> 
+                            <Text style={{fontFamily: 'SourceSansPro-Regular', marginBottom: 3}}>
+                                { item.date.toDate().toDateString()}
                             </Text>
-                            <Text>
-                                {item.id}
-                            </Text>
-                            <Pressable style={{padding: 20}} onPress={() => updateLog(item.id)}>
-                                <Text>
-                                    Update Log
-                                </Text>
-                            </Pressable>
-                            <Pressable onPress={() => deleteLog(item.id)}>
-                                <Text>
-                                    Delete Log
-                                </Text>
-                            </Pressable>
+                            <View style={{flexDirection: 'row'}}>
+                                <Pressable style={history.button} onPress={() => updateLog(item.id)}>
+                                    <Text style={{color: 'white'}}>
+                                        Update Log
+                                    </Text>
+                                </Pressable>
+                                <Pressable style={history.button} onPress={() => deleteLog(item.id)}>
+                                    <Text style={{color: 'white'}}>
+                                        Delete Log
+                                    </Text>
+                                </Pressable>
+                            </View>
+                            
                         </View>
                     )
                     })
@@ -94,12 +104,40 @@ const HistoryScreen = () => {
 }
 
 const history = StyleSheet.create({
-    buttons: {
-        marginBottom: 5,
-        padding: 10,
-        backgroundColor: '#7f70db',
-        borderRadius: 5
-    }
+    container: {
+        flex: 1,
+        alignItems: 'center'
+    },
+    inner: {
+        width: '100%',
+    },
+    logContainer: {
+        marginHorizontal: 20,
+        marginVertical: 10,
+        backgroundColor: 'white',
+        padding: 15,
+        borderRadius: 10,
+    },
+    title: {
+        fontWeight: "bold",
+        fontSize: 40,
+        padding: 20,
+    },
+    button: {
+        backgroundColor: '#3B71F3',
+        padding: 15,
+        alignItems: 'center',
+        borderRadius: 5,
+        width: '45%',
+        marginRight: 8,
+        marginTop: 7
+    },
+    shadowProp: {  
+        shadowOffset: {width: -2, height: 4},  
+        shadowColor: '#171717',  
+        shadowOpacity: 0.2,  
+        shadowRadius: 3,  
+    }, 
 });
 
 export default HistoryScreen

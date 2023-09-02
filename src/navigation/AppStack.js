@@ -2,30 +2,26 @@ import React, {useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import HomeScreen from '../screens/HomeScreen'
-import HistoryScreen from '../screens/HistoryScreen'
-import CalendarScreen from '../screens/CalendarScreen'
+import TabStack from './TabStack';
+import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 
-// Create a stack for screens when user is logged in
+// Create a stack for the authenticaion screen
+
 const Stack = createNativeStackNavigator(); 
 
 const AppStack = () => {
     return(
         <NavigationContainer>
-            <Stack.Navigator initialRouteName={"Login"}>
+            <Stack.Navigator initialRouteName={"Login"} screenOptions={{headerShown: false}}>
                 <Stack.Screen
-                    name="Home"
-                    component={HomeScreen}
+                    name="TabStack"
+                    component={TabStack}
                 />
                 <Stack.Screen
-                    name="History"
-                    component={HistoryScreen}
+                    name="ChangePassword"
+                    component={ChangePasswordScreen}
                 />
-                <Stack.Screen
-                    name="Calendar"
-                    component={CalendarScreen}
-                />
-             </Stack.Navigator>
+            </Stack.Navigator>
         </NavigationContainer>
         
     );
