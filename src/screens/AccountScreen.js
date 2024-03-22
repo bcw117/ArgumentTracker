@@ -58,13 +58,16 @@ const AccountScreen = ({navigation}) => {
         <Text style={{marginBottom: 15}}>
           {userData.email}
         </Text>
+        <Text style={{color: 'black'}}>
+          {"" + auth.currentUser.emailVerified}
+        </Text>
       </View>
       <Pressable style={account.button} onPress={() => navigation.navigate('ChangePassword')}>
         <Text>
           Change Password
         </Text>
       </Pressable>
-      <Pressable style={account.button}>
+      <Pressable style={account.button} onPress={() => navigation.navigate('ChangeEmail')}>
         <Text>
           Change Email
         </Text>
