@@ -8,6 +8,7 @@ import {
   Alert,
   TextInput,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 import moment from "moment";
 import { Calendar } from "react-native-calendars";
@@ -17,7 +18,6 @@ import { addDoc, collection } from "firebase/firestore";
 import { KeyboardAvoidingView } from "react-native";
 
 const CalendarScreen = () => {
-  const [reason, setReason] = useState("");
   const [date, setDate] = useState("");
   const [text, setText] = useState("");
 
@@ -26,12 +26,9 @@ const CalendarScreen = () => {
     tempDate = new Date(
       tempDate.setMinutes(tempDate.getMinutes() + tempDate.getTimezoneOffset())
     );
-    console.log(tempDate);
 
-    setReason(text);
-
-    if (!reason || !date) {
-      return null;
+    if (!text || !date) {
+      return alert("You have not entered a valid reason/date");
     }
 
     addDoc(collection(db, "fightLog"), {
@@ -40,7 +37,7 @@ const CalendarScreen = () => {
       date: tempDate,
     })
       .then(() => {
-        setText(undefined);
+        setText("");
         alert("Record Successfully Logged!");
       })
       .catch((error) => {
@@ -53,9 +50,9 @@ const CalendarScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={calScreen.container}>
-      <KeyboardAvoidingView behavior="padding">
-        <Text style={calScreen.title}>Calendar</Text>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView behavior="position">
+        <Text style={styles.title}>Calendar</Text>
         <Calendar
           style={{
             borderRadius: 5,
@@ -63,6 +60,7 @@ const CalendarScreen = () => {
             borderTopColor: "gray",
             borderBottomColor: "gray",
             borderWidth: 1,
+            height: 375,
           }}
           theme={{
             calendarBackground: "white",
@@ -80,33 +78,33 @@ const CalendarScreen = () => {
             },
           }}
         />
-        <View style={calScreen.infoBox}>
+        <View style={styles.textBox}>
           <Text
             style={{
-              fontFamily: "Roboto-Bold",
-              position: "relative",
-              color: "white",
+              fontFamily: "Proxima-Nova",
+              fontWeight: "bold",
+              fontSize: 20,
+              padding: 5,
+              marginBottom: 5,
             }}
           >
             Reason:
           </Text>
           <TextInput
-            style={{ height: 40, color: "white", fontFamily: "Roboto-Regular" }}
+            style={styles.textInputBox}
             placeholder="Type your problem here!"
             placeholderTextColor="#b7b8b6"
             onChangeText={(newText) => setText(newText)}
             defaultValue={text}
           />
-          <Pressable style={{ padding: 2 }}>
+          <Pressable style={styles.submitButton}>
             <Text
-              onPress={() => addLog()}
               style={{
-                position: "absolute",
-                bottom: 0,
-                right: 0,
-                color: "white",
-                fontFamily: "Roboto-Bold",
+                fontFamily: "Proxima-Nova",
+                textAlign: "center",
+                fontSize: 16,
               }}
+              onPress={() => addLog()}
             >
               Submit
             </Text>
@@ -117,28 +115,45 @@ const CalendarScreen = () => {
   );
 };
 
-const calScreen = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignContent: "center",
+    alignItems: "center",
     backgroundColor: "white",
-    width: "100%",
-    height: "100%",
   },
   title: {
+    fontFamily: "Nexa-Bold",
     fontWeight: "bold",
     fontSize: 40,
     textAlign: "center",
     marginBottom: 15,
     padding: 20,
   },
-  infoBox: {
-    padding: 25,
+  textBox: {
     backgroundColor: "#ab69e0",
+    marginTop: 20,
+    padding: 10,
     borderRadius: 10,
-    margin: 20,
   },
-  calendar: {},
+  textInputBox: {
+    alignItems: "center",
+    backgroundColor: "white",
+    borderColor: "#FFFCF1",
+    borderWidth: 1,
+    width: 340,
+    borderRadius: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
+  submitButton: {
+    width: 70,
+    marginTop: 10,
+    marginLeft: 3,
+    padding: 5,
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: "white",
+  },
 });
 
 export default CalendarScreen;

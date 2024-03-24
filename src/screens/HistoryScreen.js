@@ -125,6 +125,7 @@ const history = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "white",
   },
   inner: {
     width: "100%",
@@ -137,6 +138,7 @@ const history = StyleSheet.create({
     borderRadius: 10,
   },
   title: {
+    fontFamily: "Nexa-Bold",
     fontWeight: "bold",
     fontSize: 40,
     padding: 20,

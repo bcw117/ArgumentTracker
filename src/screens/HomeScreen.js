@@ -9,10 +9,6 @@ import {
   TextInput,
   SafeAreaView,
 } from "react-native";
-import { Calendar } from "react-native-calendars";
-import { KeyboardAvoidingView } from "react-native";
-import { auth } from "../../firebaseConfig";
-import { signOut, EmailAuthProvider } from "firebase/auth";
 
 const HomeScreen = ({ navigation }) => {
   // Assign state variables to screen
@@ -94,6 +90,7 @@ const home = StyleSheet.create({
     padding: 15,
   },
   title: {
+    fontFamily: "Nexa-Bold",
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 40,

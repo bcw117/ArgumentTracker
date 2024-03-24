@@ -10,6 +10,7 @@ function App() {
     "SourceSansPro-Bold": require("./assets/fonts/SourceSansPro-Bold.otf"),
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+    "Proxima-Nova": require("./assets/fonts/Proxima-Nova.otf"),
   });
 
   if (!loaded) {
